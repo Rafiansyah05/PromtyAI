@@ -1,0 +1,29 @@
+# Dependencies
+**/node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+**/.next/
+**/out/
+
+# Extension/Package build output
+**/dist/
+**/build/
+**/.turbo/
+
+# Local Environment variables (sensitive keys)
+**/.env
+**/.env*.local
+
+# IDE / System files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
