@@ -15,7 +15,29 @@ export async function POST(req: Request) {
       return Response.json({ valid: false, reason: 'disposable' }, { status: 400 });
     }
 
-    const domain = email.split('@')[1];
+    const domain = email.split('@')[1]?.toLowerCase();
+    if (!domain) {
+      return Response.json({ valid: false, reason: 'invalid_format' }, { status: 400 });
+    }
+
+    // Fast-path: Skip DNS MX check for extremely popular trusted domains
+    const trustedDomains = new Set([
+      'gmail.com',
+      'yahoo.com',
+      'outlook.com',
+      'hotmail.com',
+      'icloud.com',
+      'proton.me',
+      'protonmail.com',
+      'zoho.com',
+      'aol.com',
+      'gmx.com',
+      'yandex.com'
+    ]);
+
+    if (trustedDomains.has(domain)) {
+      return Response.json({ valid: true });
+    }
     
     try {
       const dnsPromise = dns.resolveMx(domain);

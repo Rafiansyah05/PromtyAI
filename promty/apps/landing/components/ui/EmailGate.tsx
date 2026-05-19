@@ -49,23 +49,19 @@ export const EmailGate = ({ isOpen, onClose }: EmailGateProps) => {
         return;
       }
 
-      // 3. Register download
-      const registerRes = await fetch('/api/register-download', {
+      // 3. Success -> Trigger download and close modal instantly!
+      const downloadUrl = process.env.NEXT_PUBLIC_EXTENSION_DOWNLOAD_URL || '#';
+      window.location.href = downloadUrl;
+      onClose();
+
+      // 4. Register download in the background (does not block the user)
+      fetch('/api/register-download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
+      }).catch((err) => {
+        console.error('Background registration failed:', err);
       });
-      const registerData = await registerRes.json();
-
-      if (!registerData.ok) {
-        setError('Failed to register. Please try again.');
-        setLoading(false);
-        return;
-      }
-
-      // 4. Success -> Redirect
-      const downloadUrl = process.env.NEXT_PUBLIC_EXTENSION_DOWNLOAD_URL || '#';
-      window.location.href = downloadUrl;
     } catch (err: unknown) {
       console.error('EmailGate error:', err);
       setError('A network error occurred. Please try again.');
