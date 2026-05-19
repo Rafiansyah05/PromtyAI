@@ -44,6 +44,8 @@ export const EmailGate = ({ isOpen, onClose }: EmailGateProps) => {
           setError(t('email.error.disposable'));
         } else if (validateData.reason === 'spam_gibberish') {
           setError('Alamat email Anda terlihat tidak aktif atau mencurigakan. Silakan gunakan email pribadi yang aktif.');
+        } else if (validateData.reason === 'smtp_rejected') {
+          setError('Alamat email Anda tidak terdaftar atau tidak aktif. Silakan gunakan email pribadi yang aktif.');
         } else {
           setError(t('email.error.mx'));
         }
