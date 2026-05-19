@@ -1,5 +1,5 @@
 import { promises as dns } from 'dns';
-import { isDisposableEmail } from '../../../lib/disposable-domains';
+import { isDisposableEmail, isSpamOrGibberish } from '../../../lib/disposable-domains';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +13,10 @@ export async function POST(req: Request) {
 
     if (isDisposableEmail(email)) {
       return Response.json({ valid: false, reason: 'disposable' }, { status: 400 });
+    }
+
+    if (isSpamOrGibberish(email)) {
+      return Response.json({ valid: false, reason: 'spam_gibberish' }, { status: 400 });
     }
 
     const domain = email.split('@')[1]?.toLowerCase();

@@ -42,6 +42,8 @@ export const EmailGate = ({ isOpen, onClose }: EmailGateProps) => {
       if (!validateData.valid) {
         if (validateData.reason === 'disposable') {
           setError(t('email.error.disposable'));
+        } else if (validateData.reason === 'spam_gibberish') {
+          setError('Alamat email Anda terlihat tidak aktif atau mencurigakan. Silakan gunakan email pribadi yang aktif.');
         } else {
           setError(t('email.error.mx'));
         }
@@ -49,19 +51,30 @@ export const EmailGate = ({ isOpen, onClose }: EmailGateProps) => {
         return;
       }
 
-      // 3. Success -> Trigger download and close modal instantly!
-      const downloadUrl = process.env.NEXT_PUBLIC_EXTENSION_DOWNLOAD_URL || '#';
-      window.location.href = downloadUrl;
-      onClose();
+      // 3. Success -> Trigger direct automatic download using dynamic anchor element!
+      const downloadUrl = process.env.NEXT_PUBLIC_EXTENSION_DOWNLOAD_URL || '/promty-extension.zip';
+      
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', 'promty-extension.zip');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-      // 4. Register download in the background (does not block the user)
-      fetch('/api/register-download', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      }).catch((err) => {
-        console.error('Background registration failed:', err);
-      });
+      // 4. Register in database ONLY after download is successfully triggered
+      try {
+        const registerRes = await fetch('/api/register-download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        await registerRes.json();
+      } catch (dbErr) {
+        console.error('Database insertion failed:', dbErr);
+      }
+
+      // 5. Close modal after all operations succeed
+      onClose();
     } catch (err: unknown) {
       console.error('EmailGate error:', err);
       setError('A network error occurred. Please try again.');
