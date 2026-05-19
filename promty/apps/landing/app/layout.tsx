@@ -13,10 +13,10 @@ export const metadata: Metadata = {
   title: "Promty | Automate Your Browser Work",
   description: "Automate Your Browser Work With One Sentence",
   icons: {
-  icon: "/images/logo_promty.png",
-  shortcut: "/images/logo_promty.png",
-  apple: "/images/logo_promty.png",
-}
+    icon: "/images/logo_promty.png",
+    shortcut: "/images/logo_promty.png",
+    apple: "/images/logo_promty.png",
+  }
 };
 
 export default function RootLayout({
