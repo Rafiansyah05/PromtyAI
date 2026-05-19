@@ -18,7 +18,12 @@ export async function POST(req: Request) {
     const domain = email.split('@')[1];
     
     try {
-      const records = await dns.resolveMx(domain);
+      const dnsPromise = dns.resolveMx(domain);
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), 1000)
+      );
+
+      const records = await Promise.race([dnsPromise, timeoutPromise]);
       const valid = records.length > 0;
       if (valid) {
         return Response.json({ valid: true });
@@ -31,7 +36,7 @@ export async function POST(req: Request) {
       if (error.code === 'ENOTFOUND' || error.code === 'ENODATA') {
         return Response.json({ valid: false, reason: 'no_mx_record' });
       }
-      // Fallback: If network error (ECONNREFUSED), assume email is valid so we don't block users.
+      // Fallback: If timeout or network error, assume email is valid so we don't block users.
       return Response.json({ valid: true });
     }
   } catch (error: unknown) {

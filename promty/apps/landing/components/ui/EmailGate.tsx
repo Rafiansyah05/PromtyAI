@@ -114,7 +114,7 @@ export const EmailGate = ({ isOpen, onClose }: EmailGateProps) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('email.placeholder')}
-                  className="w-full rounded-lg border border-borderWhite bg-bgMain px-4 py-3 text-white placeholder-textMuted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="w-full rounded-lg border border-borderWhite bg-background px-4 py-3 text-textMuted placeholder-textMuted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                   required
                 />
                 {error && (
