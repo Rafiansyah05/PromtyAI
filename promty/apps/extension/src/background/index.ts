@@ -68,20 +68,8 @@ if (chrome.sidePanel.setPanelBehavior) {
     });
 }
 
-// Open side panel on extension icon click.
-chrome.action.onClicked.addListener((tab) => {
-  console.log('[Promty] EXTENSION CLICKED');
-
-  try {
-    chrome.sidePanel.open({
-      windowId: tab.windowId,
-    });
-
-    console.log('[Promty] side panel opened');
-  } catch (err) {
-    console.error('[Promty] failed:', err);
-  }
-});
+// Note: onClicked listener is removed to avoid conflict with setPanelBehavior
+// which natively opens the side panel on extension icon click.
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
