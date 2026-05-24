@@ -5,9 +5,9 @@ module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devtool: 'cheap-module-source-map',
   entry: {
-    popup:      './src/popup/index.tsx',
+    popup: './src/popup/index.tsx',
     background: './src/background/index.ts',
-    content:    './src/content/index.ts',
+    content: './src/content/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -22,17 +22,20 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@promty/shared-types': path.resolve(__dirname, '../../packages/shared-types/dist'),
+    },
     fallback: {
-      "os": false,
-      "fs": false,
-      "path": false,
-      "crypto": false,
-      "buffer": false,
-      "stream": false,
-      "http": false,
-      "https": false,
-      "url": false
-    }
+      os: false,
+      fs: false,
+      path: false,
+      crypto: false,
+      buffer: false,
+      stream: false,
+      http: false,
+      https: false,
+      url: false,
+    },
   },
   plugins: [
     new CopyPlugin({

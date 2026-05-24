@@ -9,7 +9,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "declaration": false,
+    "paths": {
+      "@promty/shared-types": ["../../packages/shared-types/dist"]
+    }
   },
   "include": ["src"]
 }
