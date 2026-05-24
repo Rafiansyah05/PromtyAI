@@ -1,6 +1,7 @@
 {
   "name": "promty",
   "private": true,
+  "packageManager": "pnpm@10.12.1",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -8,6 +9,7 @@
     "type-check": "turbo type-check"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   }

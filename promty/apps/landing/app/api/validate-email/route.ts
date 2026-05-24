@@ -103,12 +103,10 @@ export async function POST(req: Request) {
 
     try {
       const dnsPromise = dns.resolveMx(domain);
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('timeout')), 1000)
-      );
+      const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), 1000));
 
       const records = await Promise.race([dnsPromise, timeoutPromise]);
-      
+
       if (!records || records.length === 0) {
         return Response.json({ valid: false, reason: 'no_mx_record' });
       }
